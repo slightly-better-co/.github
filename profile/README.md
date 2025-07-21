@@ -1,5 +1,7 @@
 # 🌟 Slightly Better, Co.
 
+![Slightly Better, Co. Logo](./logo.png)
+
 Welcome to Slightly Better, Co.! We’re an independent, bootstrapped studio creating SaaS products that make life just a little bit better every day.
 
 ### 🚀 Our Mission
