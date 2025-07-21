@@ -1,4 +1,4 @@
-![Slightly Better, Co. Logo](./logo.png)
+![Slightly Better, Co. Logo](./logo-small.png)
 
 # 🌟 Slightly Better, Co.
 
