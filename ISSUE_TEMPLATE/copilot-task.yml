@@ -1,0 +1,225 @@
+name: Copilot Development Task
+description: Template for scoped development tasks suitable for GitHub Copilot agents
+title: '[Task]: '
+labels: ['copilot-task', 'enhancement']
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🤖 Copilot Development Task
+
+        Use this template to create well-scoped, atomic development tasks that can be efficiently handled by GitHub Copilot agents.
+
+        **Guidelines:**
+        - Keep tasks focused and atomic (1-4 hours of work)
+        - Provide clear acceptance criteria that can be tested
+        - List specific files that need to be modified
+        - Include enough context but avoid overwhelming detail
+
+  - type: textarea
+    id: context
+    attributes:
+      label: '🧠 Context'
+      description: 'Provide background information and the problem being solved'
+      placeholder: |
+        What is the current situation? What problem are we trying to solve?
+
+        Example:
+        - Users need to track time offline when working in remote locations
+        - Current solution requires constant internet connectivity
+        - Field teams lose productivity when connectivity is poor
+      value: ''
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: '✅ Acceptance Criteria'
+      description: 'List specific, testable requirements that define when this task is complete'
+      placeholder: |
+        Define clear, measurable criteria for completion:
+
+        1. [ ] Specific functionality works as expected
+        2. [ ] Tests are written and passing
+        3. [ ] Documentation is updated (if applicable)
+        4. [ ] Performance requirements are met
+        5. [ ] Error handling is implemented
+
+        Example:
+        1. [ ] Time entries are stored in localStorage when offline
+        2. [ ] Data syncs automatically when connection is restored
+        3. [ ] Unit tests cover offline storage scenarios
+        4. [ ] Error messages are shown for failed sync attempts
+      value: ''
+    validations:
+      required: true
+
+  - type: textarea
+    id: files-involved
+    attributes:
+      label: '📁 Files Involved'
+      description: 'List the specific files that need to be created, modified, or deleted'
+      placeholder: |
+        Be as specific as possible about file paths:
+
+        **New files:**
+        - src/utils/offline-storage.js
+        - tests/offline-storage.test.js
+
+        **Modified files:**
+        - src/components/TimeTracker.jsx
+        - src/api/timeEntries.js
+        - README.md (update setup instructions)
+
+        **Deleted files:**
+        - (none expected)
+      value: ''
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: '🚨 Priority'
+      description: 'Select the priority level for this task'
+      options:
+        - 'Low - Nice to have, no rush'
+        - 'Medium - Important for next release'
+        - 'High - Blocking other work'
+        - 'Critical - Production issue'
+      default: 1
+    validations:
+      required: true
+
+  - type: dropdown
+    id: complexity
+    attributes:
+      label: '🧩 Complexity'
+      description: 'Estimate the complexity of this task'
+      options:
+        - 'Simple - Straightforward implementation'
+        - 'Medium - Some complexity, multiple components'
+        - 'Complex - Significant design decisions required'
+      default: 0
+    validations:
+      required: true
+
+  - type: input
+    id: estimated-hours
+    attributes:
+      label: '⏱️ Estimated Hours'
+      description: 'How many hours do you estimate this will take? (Keep under 4 hours for atomic tasks)'
+      placeholder: '2'
+    validations:
+      required: false
+
+  - type: textarea
+    id: technical-notes
+    attributes:
+      label: '🔧 Technical Notes'
+      description: 'Any technical considerations, constraints, or implementation hints'
+      placeholder: |
+        Include relevant technical details:
+
+        - API endpoints that need to be called
+        - Libraries or frameworks to use
+        - Performance considerations
+        - Browser/device compatibility requirements
+        - Security considerations
+
+        Example:
+        - Use localStorage for offline storage (max 5MB)
+        - Implement exponential backoff for sync retries
+        - Consider IndexedDB for larger datasets in future
+        - Must work on mobile browsers (iOS Safari, Chrome Android)
+      value: ''
+    validations:
+      required: false
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: '🔗 Dependencies'
+      description: 'List any dependencies on other issues, PRs, or external systems'
+      placeholder: |
+        - Depends on #123 (API authentication)
+        - Blocks #456 (reporting dashboard)
+        - Requires external service: GPS location API
+        - Needs design review from @designer
+      value: ''
+    validations:
+      required: false
+
+  - type: textarea
+    id: testing-approach
+    attributes:
+      label: '🧪 Testing Approach'
+      description: 'Describe how this feature should be tested'
+      placeholder: |
+        - Unit tests for core functionality
+        - Integration tests for API interactions
+        - Manual testing scenarios for offline behavior
+        - Performance testing for large datasets
+
+        Specific test cases:
+        1. Test offline storage when navigator.onLine = false
+        2. Test sync when connection is restored
+        3. Test data persistence across browser sessions
+      value: ''
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: task-type
+    attributes:
+      label: '📝 Task Type'
+      description: 'Select all that apply'
+      options:
+        - label: 'New feature development'
+        - label: 'Bug fix'
+        - label: 'Performance optimization'
+        - label: 'Refactoring'
+        - label: 'Documentation update'
+        - label: 'Testing improvements'
+        - label: 'DevOps/Infrastructure'
+
+  - type: textarea
+    id: additional-notes
+    attributes:
+      label: '🗒️ Additional Notes'
+      description: 'Any other information that might be helpful'
+      placeholder: |
+        - Links to relevant documentation
+        - Screenshots or mockups
+        - Performance benchmarks
+        - User feedback or requests
+      value: ''
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        ## 📋 Pre-submission Checklist
+
+        Before submitting this issue, please verify:
+
+        - [ ] The task is atomic and can be completed in 1-4 hours
+        - [ ] Acceptance criteria are specific and testable
+        - [ ] File list is comprehensive and accurate
+        - [ ] Context provides enough information without being overwhelming
+        - [ ] Task doesn't overlap with existing open issues
+
+        ## 🤖 For Copilot Agents
+
+        When working on this issue:
+        1. Read the copilot-instructions.md file for repository guidelines
+        2. Follow the branching convention: `copilot/fix-{issue-number}`
+        3. Make minimal, focused changes only to the files listed above
+        4. Include tests for new functionality
+        5. Update documentation if applicable
+        6. Use the report_progress tool frequently to commit incremental changes
