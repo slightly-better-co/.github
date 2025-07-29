@@ -1,0 +1,30 @@
+name: 🧭 Competitive Gap Analysis
+description: Explore similar tools in the space and identify strategic gaps we can exploit.
+title: "Perform Competitive Gap Analysis"
+labels: [planning, metrics]
+assignees:
+  - research-analyst
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📊 Goal
+        Analyze competitors and identify what they’re missing or doing poorly. Focus on gaps that can shape our product’s unique position.
+
+  - type: textarea
+    id: competitors
+    attributes:
+      label: Competitors Researched
+      placeholder: |
+        - Loom
+        - Typeform
+        - Useberry
+
+  - type: textarea
+    id: gaps
+    attributes:
+      label: Opportunity Gaps
+      description: List notable weaknesses or gaps in the market
+      placeholder: |
+        - No quick way to give visual feedback without scheduling a call
+        - Too heavy for small creative teams
