@@ -1,0 +1,51 @@
+name: ⚙️ Initialize GitHub Copilot Workflow
+description: Set up the foundational files and configurations to support Copilot Agent workflows.
+title: "Initialize GitHub Copilot Workflow with Best Practices"
+labels: [infra, planning]
+assignees:
+  - lead-developer
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🧠 Context
+
+        We’re initializing a new GitHub repository that will rely on GitHub Copilot Agents to perform scoped development tasks.
+
+        To ensure smooth automation, minimal context overhead, and alignment with team conventions, we need to scaffold key files and configurations that support GitHub Copilot's agentic workflow.
+
+        This includes action workflows, instructions, templated issue formats, and a project board with iteration support.
+
+  - type: checkboxes
+    id: criteria
+    attributes:
+      label: Acceptance Criteria
+      description: Ensure the following tasks are completed
+      options:
+        - label: Create `copilot-instructions.md` at the root with repo purpose, tech stack, setup, PR workflows, and Copilot expectations
+        - label: Create `.github/workflows/copilot-setup-steps.yml` with correct triggers and a job named `copilot-setup-steps`
+        - label: Create `.github/ISSUE_TEMPLATE/copilot-task.yml` issue form with context, criteria, and file fields
+        - label: Configure or document GitHub Project board with iterations and standard columns
+        - label: Add guidance on breaking down high-context issues into atomic sub-issues
+        - label: (Bonus) Add optimizations for long GitHub Action runtimes (caching, job filtering, concurrency)
+
+  - type: textarea
+    id: files
+    attributes:
+      label: 📁 Files Involved
+      description: Track which files are added or edited as part of this setup
+      placeholder: |
+        - /copilot-instructions.md
+        - /.github/workflows/copilot-setup-steps.yml
+        - /.github/ISSUE_TEMPLATE/copilot-task.yml
+        - /docs/copilot-scoping-notes.md (optional)
+
+  - type: markdown
+    attributes:
+      value: |
+        ## 🗒 Notes
+
+        - Copilot agents rely on clearly scoped, testable, low-context tickets.
+        - The `copilot-setup-steps.yml` file must include a job with ID `copilot-setup-steps` or it won’t be recognized by GitHub Copilot.
+        - Consider linking the issue form from your `README.md` to promote consistent usage.
+        - For reuse across multiple repos, maintain these files in a `.github` shared template repo.
