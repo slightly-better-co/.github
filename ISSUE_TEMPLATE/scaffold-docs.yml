@@ -1,0 +1,45 @@
+name: 📁 Scaffold Docs Directory
+description: Generate the foundational documentation structure under /docs/ for a new product repository.
+title: "Scaffold Docs Directory for Stage 1 Planning"
+labels: [planning, infra]
+assignees:
+  - project-manager
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📁 Scaffold Stage 1 Docs Directory
+
+        This task sets up the initial documentation structure for this Slightly Better, Co. project. It creates the required folders and stub `.md` files to prepare for downstream planning tasks.
+
+        Once complete, other personas (e.g., Research Analyst, Marketer, UX Designer) will populate these files with real content based on dedicated prompts and issues.
+
+  - type: checkboxes
+    id: structure
+    attributes:
+      label: Required Structure
+      description: Ensure the following directories and files are scaffolded
+      options:
+        - label: `/docs/README.md`
+        - label: `/docs/blueprint/README.md`
+        - label: `/docs/blueprint/product-brief.md`
+        - label: `/docs/blueprint/product-tech-stack.md`
+        - label: `/docs/planning/README.md`
+        - label: `/docs/planning/pain-points.md`
+        - label: `/docs/planning/user-personas.md`
+        - label: `/docs/planning/competitive-analysis.md`
+        - label: `/docs/planning/validation-survey.md`
+        - label: `/docs/marketing/README.md`
+        - label: `/docs/marketing/landing-page-copy.md`
+        - label: `/docs/marketing/audience-insights.md`
+        - label: `/docs/design/README.md`
+        - label: `/docs/design/wireframes.md`
+        - label: `/docs/design/interaction-notes.md`
+
+  - type: markdown
+    attributes:
+      value: |
+        ## ✅ Notes
+        - Each file should include a single H1 heading and no placeholder text.
+        - Do not include empty folders in the repo — create at least the H1 stub file in each.
+        - File content will be populated by future issues.
