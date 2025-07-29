@@ -149,7 +149,7 @@ body:
         - Requires external service: GPS location API
         - Needs design review from @designer
       value: ''
-    validations:
+    validations: 
       required: false
 
   - type: textarea
