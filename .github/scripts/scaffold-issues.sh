@@ -80,6 +80,17 @@ fi
 GITHUB_PROJECT="${GITHUB_PROJECT:-}"
 GITHUB_ASSIGNEE="${GITHUB_ASSIGNEE:-@me}"
 
+# Validate project exists if specified
+if [ -n "$GITHUB_PROJECT" ]; then
+    echo -e "${BLUE}🔍 Validating project: $GITHUB_PROJECT${NC}"
+    if ! gh project list --format json 2>/dev/null | grep -q "\"title\":\"$GITHUB_PROJECT\""; then
+        echo -e "${YELLOW}⚠️  Project '$GITHUB_PROJECT' not found. Issues will be created without project assignment.${NC}"
+        GITHUB_PROJECT=""
+    else
+        echo -e "${GREEN}✅ Project validated: $GITHUB_PROJECT${NC}"
+    fi
+fi
+
 # Function to extract content between markdown headers
 extract_section() {
     local file="$1"
@@ -87,8 +98,51 @@ extract_section() {
     local next_header="$3"
     
     if [ -n "$next_header" ]; then
+        # Look for the specific next header
         sed -n "/^## $header/,/^## $next_header/p" "$file" | sed '$d' | tail -n +2
     else
+        # Extract from header to end of file
+        sed -n "/^## $header/,\$p" "$file" | tail -n +2
+    fi
+}
+
+# Function to extract content for a section, handling missing subsequent sections
+extract_section_robust() {
+    local file="$1"
+    local header="$2"
+    
+    # Get all the possible headers that could come after this one
+    local all_headers=("🧠 Context" "✅ Acceptance Criteria" "📁 Files Involved" "🎭 Role Prompt File" "⏱️ Estimated Hours" "🧩 Complexity" "🔗 Dependencies" "🔧 Technical Notes" "🧪 Testing")
+    
+    # Find the current header index
+    local current_index=-1
+    for i in "${!all_headers[@]}"; do
+        if [[ "${all_headers[$i]}" == "$header" ]]; then
+            current_index=$i
+            break
+        fi
+    done
+    
+    if [ $current_index -eq -1 ]; then
+        # Header not found in our list, fall back to basic extraction
+        sed -n "/^## $header/,\$p" "$file" | tail -n +2
+        return
+    fi
+    
+    # Look for the next existing header in the file
+    local next_header=""
+    for (( i=$((current_index + 1)); i<${#all_headers[@]}; i++ )); do
+        if grep -q "^## ${all_headers[$i]}" "$file"; then
+            next_header="${all_headers[$i]}"
+            break
+        fi
+    done
+    
+    if [ -n "$next_header" ]; then
+        # Extract until the next found header
+        sed -n "/^## $header/,/^## $next_header/p" "$file" | sed '$d' | tail -n +2
+    else
+        # Extract to end of file
         sed -n "/^## $header/,\$p" "$file" | tail -n +2
     fi
 }
@@ -113,16 +167,27 @@ create_issue_from_task() {
         return
     fi
     
-    # Extract sections
-    local context=$(extract_section "$task_file" "🧠 Context" "✅ Acceptance Criteria")
-    local acceptance_criteria=$(extract_section "$task_file" "✅ Acceptance Criteria" "📁 Files Involved")
-    local files_involved=$(extract_section "$task_file" "📁 Files Involved" "🎭 Role Prompt File")
-    local role_prompt=$(extract_section "$task_file" "🎭 Role Prompt File" "⏱️ Estimated Hours")
-    local estimated_hours=$(extract_section "$task_file" "⏱️ Estimated Hours" "🧩 Complexity")
-    local complexity=$(extract_section "$task_file" "🧩 Complexity" "🔗 Dependencies")
-    local dependencies=$(extract_section "$task_file" "🔗 Dependencies" "🔧 Technical Notes")
-    local technical_notes=$(extract_section "$task_file" "🔧 Technical Notes" "🧪 Testing")
-    local testing=$(extract_section "$task_file" "🧪 Testing" "")
+    # Check if issue with this title already exists
+    echo -e "${BLUE}🔍 Checking if issue already exists: $title${NC}"
+    local existing_issue=$(gh issue list --search "\"$title\"" --state all --limit 1 --json title,number 2>/dev/null)
+    
+    if [ -n "$existing_issue" ] && [ "$existing_issue" != "[]" ]; then
+        local issue_number=$(echo "$existing_issue" | grep -o '"number":[0-9]*' | grep -o '[0-9]*')
+        echo -e "${YELLOW}⏭️  Issue already exists: #$issue_number - $title${NC}"
+        echo -e "${BLUE}   Skipping creation...${NC}"
+        return
+    fi
+    
+    # Extract sections using the robust method
+    local context=$(extract_section_robust "$task_file" "🧠 Context")
+    local acceptance_criteria=$(extract_section_robust "$task_file" "✅ Acceptance Criteria")
+    local files_involved=$(extract_section_robust "$task_file" "📁 Files Involved")
+    local role_prompt=$(extract_section_robust "$task_file" "🎭 Role Prompt File")
+    local estimated_hours=$(extract_section_robust "$task_file" "⏱️ Estimated Hours")
+    local complexity=$(extract_section_robust "$task_file" "🧩 Complexity")
+    local dependencies=$(extract_section_robust "$task_file" "🔗 Dependencies")
+    local technical_notes=$(extract_section_robust "$task_file" "🔧 Technical Notes")
+    local testing=$(extract_section_robust "$task_file" "🧪 Testing")
     
     # Build issue body
     local body="## 🧠 Context
@@ -143,22 +208,22 @@ $estimated_hours
 ## 🧩 Complexity
 $complexity"
 
-    # Add optional sections if they exist
-    if [ -n "$dependencies" ] && [ "$dependencies" != "" ]; then
+    # Add optional sections if they exist and have content
+    if [ -n "$dependencies" ] && [ "$(echo "$dependencies" | tr -d '[:space:]')" != "" ]; then
         body="$body
 
 ## 🔗 Dependencies
 $dependencies"
     fi
     
-    if [ -n "$technical_notes" ] && [ "$technical_notes" != "" ]; then
+    if [ -n "$technical_notes" ] && [ "$(echo "$technical_notes" | tr -d '[:space:]')" != "" ]; then
         body="$body
 
 ## 🔧 Technical Notes
 $technical_notes"
     fi
     
-    if [ -n "$testing" ] && [ "$testing" != "" ]; then
+    if [ -n "$testing" ] && [ "$(echo "$testing" | tr -d '[:space:]')" != "" ]; then
         body="$body
 
 ## 🧪 Testing
@@ -191,68 +256,58 @@ $testing"
     local temp_body_file=$(mktemp)
     echo "$body" > "$temp_body_file"
     
-    # Build the gh issue create command with optional parameters
-    local gh_cmd="gh issue create --title \"$title\" --body-file \"$temp_body_file\""
+    # Build the gh issue create command arguments as an array
+    local gh_args=("issue" "create" "--title" "$title" "--body-file" "$temp_body_file")
     
     # Add assignee (defaults to @me)
     if [ -n "$GITHUB_ASSIGNEE" ]; then
-        gh_cmd="$gh_cmd --assignee \"$GITHUB_ASSIGNEE\""
+        gh_args+=("--assignee" "$GITHUB_ASSIGNEE")
     fi
     
     # Add project if specified
     if [ -n "$GITHUB_PROJECT" ]; then
-        gh_cmd="$gh_cmd --project \"$GITHUB_PROJECT\""
+        gh_args+=("--project" "$GITHUB_PROJECT")
     fi
     
     # Add labels if available
     if [ -n "$labels" ]; then
-        gh_cmd="$gh_cmd --label \"$labels\""
+        gh_args+=("--label" "$labels")
     fi
     
     # Execute the command and capture output
     local issue_url=""
-    echo -e "${BLUE}  Command: $gh_cmd${NC}"
+    echo -e "${BLUE}  Command: gh ${gh_args[*]}${NC}"
     
-    if [ -n "$labels" ]; then
-        # Try to create with labels first
-        issue_url=$(eval "$gh_cmd" 2>&1)
-        
-        if [[ $? -eq 0 ]]; then
-            echo -e "${GREEN}✅ Created issue with labels: $title${NC}"
-            echo -e "${BLUE}   URL: $issue_url${NC}"
-        else
-            # If labels fail, try without them
-            echo -e "${YELLOW}⚠️  Labels failed, trying without labels...${NC}"
-            gh_cmd_no_labels="gh issue create --title \"$title\" --body-file \"$temp_body_file\""
-            
-            if [ -n "$GITHUB_ASSIGNEE" ]; then
-                gh_cmd_no_labels="$gh_cmd_no_labels --assignee \"$GITHUB_ASSIGNEE\""
-            fi
-            
-            if [ -n "$GITHUB_PROJECT" ]; then
-                gh_cmd_no_labels="$gh_cmd_no_labels --project \"$GITHUB_PROJECT\""
-            fi
-            
-            issue_url=$(eval "$gh_cmd_no_labels" 2>&1)
-            
-            if [[ $? -eq 0 ]]; then
-                echo -e "${YELLOW}⚠️  Created issue without labels: $title${NC}"
-                echo -e "${BLUE}   URL: $issue_url${NC}"
-            else
-                echo -e "${RED}❌ Failed to create issue: $title${NC}"
-                echo -e "${RED}   Error: $issue_url${NC}"
-            fi
-        fi
+    # Try to create the issue
+    issue_url=$(gh "${gh_args[@]}" 2>&1)
+    local exit_code=$?
+    
+    if [[ $exit_code -eq 0 ]]; then
+        echo -e "${GREEN}✅ Created issue successfully: $title${NC}"
+        echo -e "${BLUE}   URL: $issue_url${NC}"
     else
-        # Create without labels
-        issue_url=$(eval "$gh_cmd" 2>&1)
+        # If it failed, try with minimal options (just title and body)
+        echo -e "${YELLOW}⚠️  Full command failed, trying with minimal options...${NC}"
+        echo -e "${RED}   Error was: $issue_url${NC}"
         
-        if [[ $? -eq 0 ]]; then
-            echo -e "${GREEN}✅ Created issue: $title${NC}"
+        local minimal_args=("issue" "create" "--title" "$title" "--body-file" "$temp_body_file")
+        
+        # Only add assignee if it's simple (no spaces, starts with @)
+        if [ -n "$GITHUB_ASSIGNEE" ] && [[ "$GITHUB_ASSIGNEE" =~ ^@[a-zA-Z0-9_-]+$ ]]; then
+            minimal_args+=("--assignee" "$GITHUB_ASSIGNEE")
+        fi
+        
+        issue_url=$(gh "${minimal_args[@]}" 2>&1)
+        exit_code=$?
+        
+        if [[ $exit_code -eq 0 ]]; then
+            echo -e "${YELLOW}⚠️  Created issue with minimal options: $title${NC}"
             echo -e "${BLUE}   URL: $issue_url${NC}"
+            echo -e "${YELLOW}   Note: May be missing labels/project assignment${NC}"
         else
-            echo -e "${RED}❌ Failed to create issue: $title${NC}"
+            echo -e "${RED}❌ Failed to create issue completely: $title${NC}"
             echo -e "${RED}   Error: $issue_url${NC}"
+            return 1
         fi
     fi
     
@@ -307,8 +362,9 @@ while IFS= read -r task_file; do
     fi
     
     echo -e "${BLUE}🔍 Found task file: $task_file (sprint: $sprint_dir)${NC}"
-    create_issue_from_task "$task_file" "$sprint_dir"
-    ((issues_created++))
+    if create_issue_from_task "$task_file" "$sprint_dir"; then
+        ((issues_created++))
+    fi
 done < "$temp_file_list"
 
 # Clean up temp file
