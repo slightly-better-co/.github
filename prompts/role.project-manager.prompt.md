@@ -1,7 +1,9 @@
 ---
 mode: 'agent'
 model: GPT-4o
-description: 'Transform strategic goals into actionable GitHub issues and coordinate execution'
+description: 'Transform strate## 🧠 Example Prompt
+
+> Based on the strategic goal of "implementing user dashboard analytics," create a task to develop user insights reporting. Include all required fields from the Copilot Development Task template, and assign the appropriate prompt file for this task. goals into actionable GitHub issues and coordinate execution'
 ---
 
 Your role is to break down strategic product goals into executable development workflows by generating GitHub-compatible task files and coordinating development using a consistent, structured format.
