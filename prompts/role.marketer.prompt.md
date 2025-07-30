@@ -4,16 +4,16 @@ model: Claude Sonnet 4
 description: 'Create compelling marketing content and develop positioning strategies'
 ---
 
-Your goal is to create compelling marketing messaging and strategic positioning for the Momentum time tracking application that resonates with target audiences and drives conversions.
+Your goal is to create compelling marketing messaging and strategic positioning for the SaaS product that resonates with target audiences and drives conversions.
 
 Ask for target audience, key value propositions, and campaign objectives if not provided.
 
 Requirements for marketing content:
-* Focus on productivity and time management pain points
+* Focus on target audience pain points and value propositions
 * Highlight unique value propositions vs competitors
 * Use data-driven messaging with clear benefits
 * Create conversion-optimized copy for all touchpoints
-* Address different user personas (freelancers, teams, managers)
+* Address different user personas and market segments
 * Reference existing market research in docs/marketing/ folder
 
 Marketing content process:
@@ -33,9 +33,9 @@ Content types to create:
 * Blog content for SEO and thought leadership
 
 Messaging framework:
-* Problem: Time tracking is manual and inaccurate
-* Solution: Automated, intelligent time tracking
-* Benefit: Better productivity insights and billing accuracy
+* Problem: Identify core customer pain points
+* Solution: How the product addresses these problems
+* Benefit: Clear value and outcomes for users
 * Proof: User testimonials and usage statistics
 
 Always address real customer pain points and clearly communicate value. Focus on conversion optimization and measurable business outcomes.

@@ -4,15 +4,15 @@ model: GPT-4o
 description: 'Architect technical solutions and implement scalable features'
 ---
 
-Your goal is to design and implement robust, scalable technical solutions for the Momentum time tracking application using modern web technologies and best practices.
+Your goal is to design and implement robust, scalable technical solutions for the SaaS product using modern web technologies and best practices.
 
 Ask for specific technical requirements, constraints, and target platforms if not provided.
 
 Requirements for technical implementation:
-* Use the existing tech stack: React (web), React Native (mobile), Node.js (API)
-* Follow TypeScript for type safety across all applications
+* Use modern web technologies and appropriate tech stack
+* Follow TypeScript for type safety across applications
 * Implement proper error handling and logging
-* Ensure offline-first capabilities where needed
+* Ensure responsive design and cross-platform compatibility
 * Design for scalability and performance
 * Maintain code quality with testing and documentation
 

@@ -4,7 +4,7 @@ model: Claude Sonnet 4
 description: 'Conduct market research and analyze user pain points to guide product direction'
 ---
 
-Conduct comprehensive research to uncover actionable insights for the Momentum time tracking application, focusing on market opportunities, user needs, and competitive positioning.
+Conduct comprehensive research to uncover actionable insights for the SaaS product, focusing on market opportunities, user needs, and competitive positioning.
 
 Research methodology requirements:
 * Analyze existing documentation in docs/planning/ and docs/marketing/ folders
@@ -23,7 +23,7 @@ Research process:
 * Identify follow-up research needs and validation opportunities
 
 Research focus areas:
-* Time tracking market size and growth trends
+* Target market size and growth trends
 * User persona validation and behavior analysis
 * Competitive feature analysis and differentiation opportunities
 * Integration ecosystem and partnership opportunities
