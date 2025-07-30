@@ -106,35 +106,6 @@ High - Requires thorough market research
 - pain-point.yml
 EOF
 
-cat > .github/tasks/1-planning/copilot-task.yml << 'EOF'
-# 🤖 Copilot Task Integration
-
-## 🧠 Context
-Set up GitHub Copilot integration and task automation workflows for the project.
-
-## ✅ Acceptance Criteria
-- [ ] Configure Copilot workspace settings
-- [ ] Set up task automation scripts
-- [ ] Document Copilot usage guidelines
-- [ ] Test AI-assisted development workflows
-
-## 📁 Files Involved
-- .vscode/settings.json
-- scripts/copilot-helpers.sh
-
-## 🎭 Role Prompt File
-lead-developer-prompt.md
-
-## ⏱️ Estimated Hours
-2 hours
-
-## 🧩 Complexity
-Medium - Technical setup and configuration
-
-## 🔗 Dependencies
-- initialize-workflow.yml
-EOF
-
 cat > .github/tasks/1-planning/customer-validation-survey.yml << 'EOF'
 # 📋 Customer Validation Survey
 
@@ -162,36 +133,6 @@ Medium - Survey design and deployment
 ## 🔗 Dependencies
 - persona-builder.yml
 - pain-point.yml
-EOF
-
-cat > .github/tasks/1-planning/initialize-workflow.yml << 'EOF'
-# 🚀 Initialize Project Workflow
-
-## 🧠 Context
-Set up the foundational project structure, workflows, and development environment.
-
-## ✅ Acceptance Criteria
-- [ ] Create project repository structure
-- [ ] Set up development environment
-- [ ] Configure CI/CD pipelines
-- [ ] Document project setup process
-
-## 📁 Files Involved
-- README.md
-- .github/workflows/
-- package.json or equivalent
-
-## 🎭 Role Prompt File
-project-manager-prompt.md
-
-## ⏱️ Estimated Hours
-2 hours
-
-## 🧩 Complexity
-Medium - Project infrastructure setup
-
-## 🔗 Dependencies
-None - foundational task
 EOF
 
 cat > .github/tasks/1-planning/mvp-landing-page-copy.yml << 'EOF'
@@ -305,38 +246,6 @@ Low - Social media monitoring
 
 ## 🔗 Dependencies
 - pain-point.yml
-EOF
-
-# Sprint 2 - System task
-cat > .github/tasks/2-system/system-setup.yml << 'EOF'
-# ⚙️ System Setup and Infrastructure
-
-## 🧠 Context
-Set up the core technical infrastructure, development environment, and deployment pipeline for the product.
-
-## ✅ Acceptance Criteria
-- [ ] Configure development environment
-- [ ] Set up database and backend infrastructure
-- [ ] Configure CI/CD pipeline
-- [ ] Set up monitoring and logging
-- [ ] Document system architecture
-
-## 📁 Files Involved
-- docker-compose.yml
-- .github/workflows/
-- Infrastructure configuration files
-
-## 🎭 Role Prompt File
-lead-developer-prompt.md
-
-## ⏱️ Estimated Hours
-8 hours
-
-## 🧩 Complexity
-High - Complex technical setup
-
-## 🔗 Dependencies
-- initialize-workflow.yml
 EOF
 
 echo "✅ Tasks directory structure scaffolded successfully!"
