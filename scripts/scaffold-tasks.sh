@@ -15,7 +15,7 @@ mkdir -p .github/tasks/4-onboarding
 mkdir -p .github/tasks/5-launch
 
 # Create scaffold-docs-issue.yml in tasks root
-cat > .github/tasks/scaffold-docs-issue.yml << 'EOF'
+cat > .github/tasks/scaffold-docs-issue.md << 'EOF'
 # 📁 Scaffold Docs Issue Task
 
 ## 🧠 Context
@@ -50,7 +50,7 @@ Verify all directories and files exist with proper H1 headings
 EOF
 
 # Sprint 1 - Planning tasks
-cat > .github/tasks/1-planning/audience-insights.yml << 'EOF'
+cat > .github/tasks/1-planning/audience-insights.md << 'EOF'
 # 📊 Audience Insights Research
 
 ## 🧠 Context
@@ -78,7 +78,7 @@ Medium - Requires market research and analysis
 - persona-builder.yml
 EOF
 
-cat > .github/tasks/1-planning/competitive-gap-analysis.yml << 'EOF'
+cat > .github/tasks/1-planning/competitive-gap-analysis.md << 'EOF'
 # 🔍 Competitive Gap Analysis
 
 ## 🧠 Context
@@ -106,7 +106,7 @@ High - Requires thorough market research
 - pain-point.yml
 EOF
 
-cat > .github/tasks/1-planning/customer-validation-survey.yml << 'EOF'
+cat > .github/tasks/1-planning/customer-validation-survey.md << 'EOF'
 # 📋 Customer Validation Survey
 
 ## 🧠 Context
@@ -135,7 +135,7 @@ Medium - Survey design and deployment
 - pain-point.yml
 EOF
 
-cat > .github/tasks/1-planning/mvp-landing-page-copy.yml << 'EOF'
+cat > .github/tasks/1-planning/mvp-landing-page-copy.md << 'EOF'
 # 📝 MVP Landing Page Copy
 
 ## 🧠 Context
@@ -164,7 +164,7 @@ High - Requires copywriting expertise
 - persona-builder.yml
 EOF
 
-cat > .github/tasks/1-planning/pain-point.yml << 'EOF'
+cat > .github/tasks/1-planning/pain-point.md << 'EOF'
 # 🎯 Pain Point Analysis
 
 ## 🧠 Context
@@ -192,7 +192,7 @@ Medium - User research and analysis
 None - foundational research task
 EOF
 
-cat > .github/tasks/1-planning/persona-builder.yml << 'EOF'
+cat > .github/tasks/1-planning/persona-builder.md << 'EOF'
 # 👥 User Persona Development
 
 ## 🧠 Context
@@ -220,7 +220,7 @@ High - Requires user research and synthesis
 - pain-point.yml
 EOF
 
-cat > .github/tasks/1-planning/trend-scanner-reddit.yml << 'EOF'
+cat > .github/tasks/1-planning/trend-scanner-reddit.md << 'EOF'
 # 📡 Reddit Trend Scanning
 
 ## 🧠 Context
