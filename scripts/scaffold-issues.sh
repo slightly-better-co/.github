@@ -98,8 +98,51 @@ extract_section() {
     local next_header="$3"
     
     if [ -n "$next_header" ]; then
+        # Look for the specific next header
         sed -n "/^## $header/,/^## $next_header/p" "$file" | sed '$d' | tail -n +2
     else
+        # Extract from header to end of file
+        sed -n "/^## $header/,\$p" "$file" | tail -n +2
+    fi
+}
+
+# Function to extract content for a section, handling missing subsequent sections
+extract_section_robust() {
+    local file="$1"
+    local header="$2"
+    
+    # Get all the possible headers that could come after this one
+    local all_headers=("🧠 Context" "✅ Acceptance Criteria" "📁 Files Involved" "🎭 Role Prompt File" "⏱️ Estimated Hours" "🧩 Complexity" "🔗 Dependencies" "🔧 Technical Notes" "🧪 Testing")
+    
+    # Find the current header index
+    local current_index=-1
+    for i in "${!all_headers[@]}"; do
+        if [[ "${all_headers[$i]}" == "$header" ]]; then
+            current_index=$i
+            break
+        fi
+    done
+    
+    if [ $current_index -eq -1 ]; then
+        # Header not found in our list, fall back to basic extraction
+        sed -n "/^## $header/,\$p" "$file" | tail -n +2
+        return
+    fi
+    
+    # Look for the next existing header in the file
+    local next_header=""
+    for (( i=$((current_index + 1)); i<${#all_headers[@]}; i++ )); do
+        if grep -q "^## ${all_headers[$i]}" "$file"; then
+            next_header="${all_headers[$i]}"
+            break
+        fi
+    done
+    
+    if [ -n "$next_header" ]; then
+        # Extract until the next found header
+        sed -n "/^## $header/,/^## $next_header/p" "$file" | sed '$d' | tail -n +2
+    else
+        # Extract to end of file
         sed -n "/^## $header/,\$p" "$file" | tail -n +2
     fi
 }
@@ -135,16 +178,16 @@ create_issue_from_task() {
         return
     fi
     
-    # Extract sections
-    local context=$(extract_section "$task_file" "🧠 Context" "✅ Acceptance Criteria")
-    local acceptance_criteria=$(extract_section "$task_file" "✅ Acceptance Criteria" "📁 Files Involved")
-    local files_involved=$(extract_section "$task_file" "📁 Files Involved" "🎭 Role Prompt File")
-    local role_prompt=$(extract_section "$task_file" "🎭 Role Prompt File" "⏱️ Estimated Hours")
-    local estimated_hours=$(extract_section "$task_file" "⏱️ Estimated Hours" "🧩 Complexity")
-    local complexity=$(extract_section "$task_file" "🧩 Complexity" "🔗 Dependencies")
-    local dependencies=$(extract_section "$task_file" "🔗 Dependencies" "🔧 Technical Notes")
-    local technical_notes=$(extract_section "$task_file" "🔧 Technical Notes" "🧪 Testing")
-    local testing=$(extract_section "$task_file" "🧪 Testing" "")
+    # Extract sections using the robust method
+    local context=$(extract_section_robust "$task_file" "🧠 Context")
+    local acceptance_criteria=$(extract_section_robust "$task_file" "✅ Acceptance Criteria")
+    local files_involved=$(extract_section_robust "$task_file" "📁 Files Involved")
+    local role_prompt=$(extract_section_robust "$task_file" "🎭 Role Prompt File")
+    local estimated_hours=$(extract_section_robust "$task_file" "⏱️ Estimated Hours")
+    local complexity=$(extract_section_robust "$task_file" "🧩 Complexity")
+    local dependencies=$(extract_section_robust "$task_file" "🔗 Dependencies")
+    local technical_notes=$(extract_section_robust "$task_file" "🔧 Technical Notes")
+    local testing=$(extract_section_robust "$task_file" "🧪 Testing")
     
     # Build issue body
     local body="## 🧠 Context
@@ -165,22 +208,22 @@ $estimated_hours
 ## 🧩 Complexity
 $complexity"
 
-    # Add optional sections if they exist
-    if [ -n "$dependencies" ] && [ "$dependencies" != "" ]; then
+    # Add optional sections if they exist and have content
+    if [ -n "$dependencies" ] && [ "$(echo "$dependencies" | tr -d '[:space:]')" != "" ]; then
         body="$body
 
 ## 🔗 Dependencies
 $dependencies"
     fi
     
-    if [ -n "$technical_notes" ] && [ "$technical_notes" != "" ]; then
+    if [ -n "$technical_notes" ] && [ "$(echo "$technical_notes" | tr -d '[:space:]')" != "" ]; then
         body="$body
 
 ## 🔧 Technical Notes
 $technical_notes"
     fi
     
-    if [ -n "$testing" ] && [ "$testing" != "" ]; then
+    if [ -n "$testing" ] && [ "$(echo "$testing" | tr -d '[:space:]')" != "" ]; then
         body="$body
 
 ## 🧪 Testing
