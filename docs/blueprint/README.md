@@ -6,5 +6,6 @@ This section contains the high-level product vision and technical architecture f
 
 - `product-brief.md` – What we're building and why
 - `product-tech-stack.md` – Technologies and architecture choices
+- `product-requirements-document.md` – PRD
 
 This documentation is typically created by the Founder and Project Manager.
