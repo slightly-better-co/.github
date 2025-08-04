@@ -8,8 +8,8 @@ Welcome to Slightly Better, Co.! We’re an independent, bootstrapped studio cre
 We believe small improvements add up. Our tools are crafted with care, creativity, and curiosity — designed to empower, delight, and simplify.
 
 ### 🛠️ Current Projects
-- **Momentum** — SaaS project #1 (codename, under development)
-- **Feedback** — SaaS project #2 (codename, under development)
+- **Momentum** — SaaS project #1
+- **Feedback** — SaaS project #2
 - **Rehearsal** - SaaS project #3
 
 ### 💡 About Us
