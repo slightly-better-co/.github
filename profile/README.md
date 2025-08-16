@@ -7,9 +7,6 @@ Welcome to Slightly Better, Co.! We’re an independent, bootstrapped studio cre
 ### Our Mission
 We believe small improvements add up. Our tools are crafted with care, creativity, and curiosity — designed to empower, delight, and simplify.
 
-### Current Projects
-- **Momentum** — Project #1
-
 ### About Us
 Founded by [Matt Hall](https://github.com/matthall00), Slightly Better, Co. is a space where code, creativity, and experimentation come together. We love building products that make people’s lives a little easier, a little more joyful, or a little more meaningful.
 
