@@ -6,6 +6,6 @@ Welcome to Slightly Better, Co.! We’re an independent, bootstrapped studio cre
 We believe small improvements add up. Our tools are crafted with care, creativity, and curiosity — designed to empower, delight, and simplify.
 
 ### About Us
-Founded by [Matt Hall](https://github.com/matthall00), Slightly Better, Co. is a space where code, creativity, and experimentation come together. We love building products that make people’s lives a little easier, a little more joyful, or a little more meaningful.
+Founded by [Slightly Private](https://github.com/slightlyprivate), Slightly Better, Co. is a space where code, creativity, and experimentation come together. We love building products that make people’s lives a little easier, a little more joyful, or a little more meaningful.
 
 🌐 Visit us at [slightlybetter.dev](https://slightlybetter.dev)
